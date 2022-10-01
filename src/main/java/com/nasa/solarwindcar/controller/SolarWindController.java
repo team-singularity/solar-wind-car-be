@@ -18,6 +18,7 @@ public class SolarWindController {
     }
 
     @GetMapping(path="/data")
+    @CrossOrigin("*")
     public ResponseEntity<?> getSolarWindByDate(@RequestParam String date1, @RequestParam String date2) {
         return ResponseEntity.ok(service.fetchSolarWind(date1, date2));
     }
