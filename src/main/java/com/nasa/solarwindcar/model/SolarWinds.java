@@ -9,5 +9,5 @@ import java.util.List;
 @Builder
 public class SolarWinds {
     List<SolarWind> solarWindFirst;
-    List<SolarWind> solarWindsSecond;
+    List<SolarWind> solarWindSecond;
 }
