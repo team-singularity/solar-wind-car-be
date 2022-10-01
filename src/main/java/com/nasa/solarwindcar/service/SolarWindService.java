@@ -58,6 +58,8 @@ public class SolarWindService {
                 .solarWindFirst(solarWind1)
                 .solarWindSecond(solarWind2)
                 .build();
+        editSolarWindsSize(solarWinds);
+        addWinner(solarWinds);
         return solarWinds;
     }
 
@@ -70,6 +72,42 @@ public class SolarWindService {
                 .ionTemperature(Double.parseDouble(columns[9]))
                 .isGood(Integer.parseInt(columns[6]) == 0 ? true : false)
                 .build();
+    }
+
+    private SolarWinds editSolarWindsSize(SolarWinds solarWinds) {
+        int countRowsFirst = solarWinds.getSolarWindFirst().size();
+        int countRowsSecond = solarWinds.getSolarWindSecond().size();
+        if (countRowsFirst < countRowsSecond) {
+            solarWinds.setSolarWindSecond(solarWinds.getSolarWindSecond().subList(0, countRowsFirst));
+        } else if (countRowsSecond < countRowsFirst) {
+            solarWinds.setSolarWindFirst(solarWinds.getSolarWindFirst().subList(0, countRowsSecond));
+        }
+        if (solarWinds.getSolarWindFirst().size() == solarWinds.getSolarWindSecond().size()) {
+            return solarWinds;
+        }
+        throw new RuntimeException("Different sizes of solarWind lists.");
+    }
+
+    private SolarWinds addWinner(SolarWinds solarWinds) {
+        // solar wind speed sum
+        Double speedFirst = solarWinds.getSolarWindFirst().stream()
+                .filter(solarWind -> solarWind.isGood())
+                .mapToDouble(solarWind -> solarWind.getBulkSpeed()).sum();
+        log.info(String.valueOf(speedFirst));
+
+        Double speedSecond = solarWinds.getSolarWindSecond().stream()
+                .filter(solarWind -> solarWind.isGood())
+                .mapToDouble(solarWind -> solarWind.getBulkSpeed()).sum();
+        log.info(String.valueOf(speedSecond));
+
+        if (speedFirst > speedSecond) {
+            solarWinds.setWinner(1);
+        } else if (speedSecond > speedFirst) {
+            solarWinds.setWinner(2);
+        } else {
+            solarWinds.setWinner(0);
+        }
+        return solarWinds;
     }
 
     public String getMockData() {

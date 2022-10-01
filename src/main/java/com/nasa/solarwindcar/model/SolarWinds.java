@@ -10,4 +10,5 @@ import java.util.List;
 public class SolarWinds {
     List<SolarWind> solarWindFirst;
     List<SolarWind> solarWindSecond;
+    int winner;
 }
