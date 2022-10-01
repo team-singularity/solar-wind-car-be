@@ -1,6 +1,7 @@
 package com.nasa.solarwindcar.service;
 
 import com.nasa.solarwindcar.model.SolarWind;
+import com.nasa.solarwindcar.model.SolarWinds;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SolarWindService {
 
-    public List<List<SolarWind>> fetchSolarWind(String date1, String date2) {
+    public SolarWinds fetchSolarWind(String date1, String date2) {
 
         List<SolarWind> solarWind1 = new ArrayList<>();
         List<SolarWind> solarWind2 = new ArrayList<>();
@@ -53,10 +54,11 @@ public class SolarWindService {
         } catch (Exception e) {
             log.error("Could not access files : " + e.getMessage());
         }
-        List<List<SolarWind>> solarWind = new ArrayList<>();
-        solarWind.add(solarWind1);
-        solarWind.add(solarWind2);
-        return solarWind;
+        SolarWinds solarWinds = SolarWinds.builder()
+                .solarWindFirst(solarWind1)
+                .solarWindsSecond(solarWind2)
+                .build();
+        return solarWinds;
     }
 
     private SolarWind parseInputToSolarWind(String input) {

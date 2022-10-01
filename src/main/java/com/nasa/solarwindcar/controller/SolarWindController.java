@@ -17,16 +17,12 @@ public class SolarWindController {
         return "Hello world!";
     }
 
-    @PostMapping(path="/data",
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getSolarWindByDate(@PathVariable String date1, @PathVariable String date2) {
+    @GetMapping(path="/data")
+    public ResponseEntity<?> getSolarWindByDate(@RequestParam String date1, @RequestParam String date2) {
         return ResponseEntity.ok(service.fetchSolarWind(date1, date2));
     }
 
-    @GetMapping(path="/mock-data",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path="/mock-data")
     public ResponseEntity<?> getMockData(@RequestParam String date1, @RequestParam String date2) {
         return ResponseEntity.ok(service.getMockData());
     }
