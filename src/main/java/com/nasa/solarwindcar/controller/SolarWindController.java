@@ -24,9 +24,7 @@ public class SolarWindController {
         return ResponseEntity.ok(service.fetchSolarWind(date1, date2));
     }
 
-    @GetMapping(path="/mock-data",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path="/mock-data")
     public ResponseEntity<?> getMockData(@RequestParam String date1, @RequestParam String date2) {
         return ResponseEntity.ok(service.getMockData());
     }
