@@ -56,7 +56,7 @@ public class SolarWindService {
         }
         SolarWinds solarWinds = SolarWinds.builder()
                 .solarWindFirst(solarWind1)
-                .solarWindsSecond(solarWind2)
+                .solarWindSecond(solarWind2)
                 .build();
         return solarWinds;
     }
