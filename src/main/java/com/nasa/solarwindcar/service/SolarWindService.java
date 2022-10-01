@@ -79,7 +79,7 @@ public class SolarWindService {
 
     public String getMockData() {
         return "{\n" +
-                "\tdate1: [\n" +
+                "\t\"date1\": [\n" +
                 "\t{\n" +
                 "\t\t\"time\": \"0001\",\n" +
                 "\t\t\"bulkSpeed\": 300,\n" +
@@ -96,7 +96,7 @@ public class SolarWindService {
                 "\t\t\"ionTemperature\": 1000.0,\n" +
                 "\t\t\"isGood\": false\n" +
                 "\t}], \n" +
-                "\tdate2: [\n" +
+                "\t\"date2\": [\n" +
                 "\t{\n" +
                 "\t\t\"time\": \"0001\",\n" +
                 "\t\t\"bulkSpeed\": 200,\n" +
