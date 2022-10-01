@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class SolarWind {
     String time;
-    Integer bulkSpeed;
-    Float ionTemperature;
+    Double bulkSpeed;
+    Double ionTemperature;
     boolean isGood;
 }

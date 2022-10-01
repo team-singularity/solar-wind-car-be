@@ -62,18 +62,13 @@ public class SolarWindService {
     }
 
     private SolarWind parseInputToSolarWind(String input) {
-        String[] row = input.split(" ");
-        ArrayList<String> columns = new ArrayList<>();
-        for (String word : row) {
-            word = word.replaceAll("\\s", "");
-            columns.add(word);
-        }
+        String[] columns = input.split("\\s+");
 
         return SolarWind.builder()
-                .time(columns.get(3))
-                .bulkSpeed(Integer.parseInt(columns.get(8)))
-                .ionTemperature(Float.parseFloat(columns.get(9)))
-                .isGood(Integer.parseInt(columns.get(6)) == 0 ? true : false)
+                .time(columns[3])
+                .bulkSpeed(Double.parseDouble(columns[8]))
+                .ionTemperature(Double.parseDouble(columns[9]))
+                .isGood(Integer.parseInt(columns[6]) == 0 ? true : false)
                 .build();
     }
 
