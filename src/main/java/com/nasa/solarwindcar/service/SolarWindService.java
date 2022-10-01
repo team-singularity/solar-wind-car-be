@@ -75,4 +75,43 @@ public class SolarWindService {
                 .build();
     }
 
+    public String getMockData() {
+        return "{\n" +
+                "\tdate1: [\n" +
+                "\t{\n" +
+                "\t\ttime: \"0001\",\n" +
+                "\t\tbulkSpeed: 300,\n" +
+                "\t\tionTemperature: 15000.0,\n" +
+                "\t\tisGood: true\n" +
+                "\t}, {\n" +
+                "\t\ttime: \"0002\",\n" +
+                "\t\tbulkSpeed: 350,\n" +
+                "\t\tionTemperature: 16000.0,\n" +
+                "\t\tisGood: true\n" +
+                "\t}, {\n" +
+                "\t\ttime: \"0003\",\n" +
+                "\t\tbulkSpeed: 800,\n" +
+                "\t\tionTemperature: 1000.0,\n" +
+                "\t\tisGood: false\n" +
+                "\t}], \n" +
+                "\tdate2: [\n" +
+                "\t{\n" +
+                "\t\ttime: \"0001\",\n" +
+                "\t\tbulkSpeed: 200,\n" +
+                "\t\tionTemperature: 15000.0,\n" +
+                "\t\tisGood: true\n" +
+                "\t}, {\n" +
+                "\t\ttime: \"0002\",\n" +
+                "\t\tbulkSpeed: 30,\n" +
+                "\t\tionTemperature: 160000.0,\n" +
+                "\t\tisGood: false\n" +
+                "\t}, {\n" +
+                "\t\ttime: \"0003\",\n" +
+                "\t\tbulkSpeed: 100,\n" +
+                "\t\tionTemperature: 3000.0,\n" +
+                "\t\tisGood: true\n" +
+                "\t}]\n" +
+                "}";
+    }
+
 }
