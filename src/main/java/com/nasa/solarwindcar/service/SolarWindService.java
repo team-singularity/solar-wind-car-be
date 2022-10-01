@@ -11,6 +11,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
@@ -60,6 +61,7 @@ public class SolarWindService {
                 .build();
         editSolarWindsSize(solarWinds);
         addWinner(solarWinds);
+        addTemperatureLevel(solarWinds);
         return solarWinds;
     }
 
@@ -70,7 +72,7 @@ public class SolarWindService {
                 .time(columns[3])
                 .bulkSpeed(Double.parseDouble(columns[8]))
                 .ionTemperature(Double.parseDouble(columns[9]))
-                .isGood(Integer.parseInt(columns[6]) == 0 ? true : false)
+                .isGood(Integer.parseInt(columns[6]) == 0 && !columns[8].equals("-9999.9") && !columns[9].equals("-1.00e+05"))
                 .build();
     }
 
@@ -93,12 +95,12 @@ public class SolarWindService {
         Double speedFirst = solarWinds.getSolarWindFirst().stream()
                 .filter(solarWind -> solarWind.isGood())
                 .mapToDouble(solarWind -> solarWind.getBulkSpeed()).sum();
-        log.info(String.valueOf(speedFirst));
+        //log.info(String.valueOf(speedFirst));
 
         Double speedSecond = solarWinds.getSolarWindSecond().stream()
                 .filter(solarWind -> solarWind.isGood())
                 .mapToDouble(solarWind -> solarWind.getBulkSpeed()).sum();
-        log.info(String.valueOf(speedSecond));
+        //log.info(String.valueOf(speedSecond));
 
         if (speedFirst > speedSecond) {
             solarWinds.setWinner(1);
@@ -108,6 +110,74 @@ public class SolarWindService {
             solarWinds.setWinner(0);
         }
         return solarWinds;
+    }
+
+    private void addTemperatureLevel(SolarWinds solarWinds) {
+        // get maximum temperature
+        Double maxTempFirst = solarWinds.getSolarWindFirst().stream()
+                .filter(solarWind -> solarWind.isGood())
+                .max(Comparator.comparing(SolarWind::getIonTemperature))
+                .map(solarWind -> solarWind.getIonTemperature()).orElseThrow();
+        Double maxTempSecond = solarWinds.getSolarWindSecond().stream()
+                .filter(solarWind -> solarWind.isGood())
+                .max(Comparator.comparing(SolarWind::getIonTemperature))
+                .map(solarWind -> solarWind.getIonTemperature()).orElseThrow();
+        Double maxTemp = 0D;
+        if (maxTempFirst >= maxTempSecond) {
+            maxTemp += maxTempFirst;
+        } else {
+            maxTemp += maxTempSecond;
+        }
+        log.info(String.valueOf(maxTemp));
+
+        // get minimum temperature
+        Double minTempFirst = solarWinds.getSolarWindFirst().stream()
+                .filter(solarWind -> solarWind.isGood())
+                .min(Comparator.comparing(SolarWind::getIonTemperature))
+                .map(solarWind -> solarWind.getIonTemperature()).orElseThrow();
+        Double minTempSecond = solarWinds.getSolarWindSecond().stream()
+                .filter(solarWind -> solarWind.isGood())
+                .min(Comparator.comparing(SolarWind::getIonTemperature))
+                .map(solarWind -> solarWind.getIonTemperature()).orElseThrow();
+        Double minTemp = 0D;
+        if (minTempFirst <= minTempSecond) {
+            minTemp += minTempFirst;
+        } else {
+            minTemp += minTempSecond;
+        }
+        //log.info(String.valueOf(minTemp));
+
+        Double scale = maxTemp - minTemp;
+        List<Double> upperLevels = new ArrayList<>();
+        //log.info(String.valueOf(upperLevels));
+        for (int i = 1; i <= maxTemp; i++) {
+            upperLevels.add(scale/5 * i);
+        }
+        solarWinds.getSolarWindFirst().stream()
+                .filter(solarWind -> solarWind.isGood())
+                .forEach(solarWind -> solarWind.setTempLevel(addLevelColor(solarWind.getIonTemperature(), upperLevels)));
+
+        solarWinds.getSolarWindSecond().stream()
+                .filter(solarWind -> solarWind.isGood())
+                .forEach(solarWind -> solarWind.setTempLevel(addLevelColor(solarWind.getIonTemperature(), upperLevels)));
+
+    }
+
+    private int addLevelColor(Double temperature, List<Double> levels) {
+        if (temperature < levels.get(0)) {
+            return 1;
+        } else if (temperature < levels.get(1)) {
+            return 2;
+        }
+        else if (temperature < levels.get(2)) {
+            return 3;
+        }
+        else if (temperature < levels.get(3)) {
+            return 4;
+        }
+        else {
+            return 5;
+        }
     }
 
     public String getMockData() {

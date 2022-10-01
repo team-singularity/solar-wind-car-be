@@ -10,4 +10,5 @@ public class SolarWind {
     Double bulkSpeed;
     Double ionTemperature;
     boolean isGood;
+    int tempLevel;
 }
